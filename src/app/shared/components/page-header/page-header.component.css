@@ -1,0 +1,10 @@
+mat-toolbar .spacer {
+  flex: 1 1 auto;
+}
+mat-toolbar .user-info {
+  display: flex;
+  align-items: center;
+}
+mat-toolbar .user-info button {
+  margin-left: 1.5rem;
+}/*# sourceMappingURL=page-header.component.css.map */
