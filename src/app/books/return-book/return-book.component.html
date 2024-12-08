@@ -1,32 +1,58 @@
-<mat-card>
-    <mat-card-header>
-        <h1>Return a Book</h1>
-    </mat-card-header>
-
-    <mat-card-content [formGroup]="returnForm">
-
-        <mat-form-field appearance="outline" color="accent">
-            <mat-label>User ID</mat-label>
-            <input matInput formControlName="userId">
-        </mat-form-field>
-
-        <mat-form-field appearance="outline" color="accent">
-            <mat-label>Book ID</mat-label>
-            <input matInput formControlName="bookId">
-        </mat-form-field>
-
-        <div class="fine">
-            <button mat-stroked-button color="accent" (click)="getFine()">
-                Get Fine
-            </button>
-            <span [ngStyle]="{'display': fineToPay === null ? 'none' : 'flex'}">
-                {{fineToPay}}Rs
-            </span>
-        </div>
-
-        <button mat-stroked-button color="accent" (click)="returnBook()">
-            Return Book
+<div class="max-w-lg mx-auto bg-white shadow-md rounded-lg p-6">
+    <h1 class="text-2xl font-bold mb-6 text-center">Return a Book</h1>
+  
+    <form [formGroup]="returnForm" class="space-y-4">
+      <!-- User ID Input -->
+      <div>
+        <label for="memberId" class="block text-gray-700 font-semibold">Member ID</label>
+        <input
+          id="memberId"
+          type="text"
+          formControlName="memberId"
+          class="w-full border border-gray-300 rounded-lg p-2 focus:ring focus:ring-blue-200"
+          placeholder="Enter Member ID"
+        />
+      </div>
+  
+      <!-- Book ID Input -->
+      <div>
+        <label for="bookId" class="block text-gray-700 font-semibold">Book ID</label>
+        <input
+          id="bookId"
+          type="text"
+          formControlName="bookId"
+          class="w-full border border-gray-300 rounded-lg p-2 focus:ring focus:ring-blue-200"
+          placeholder="Enter Book ID"
+        />
+      </div>
+  
+      <!-- Fine Section -->
+      <div class="flex items-center space-x-4">
+        <button
+          type="button"
+          class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 focus:outline-none"
+          (click)="getFine()"
+        >
+          Get Fine
         </button>
-
-    </mat-card-content>
-</mat-card>
+        <span
+          *ngIf="fineToPay !== null"
+          class="text-gray-700 text-lg font-semibold"
+        >
+          {{fineToPay}} Rs
+        </span>
+      </div>
+  
+      <!-- Return Book Button -->
+      <div>
+        <button
+          type="button"
+          class="w-full bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 focus:outline-none"
+          (click)="returnBook()"
+        >
+          Return Book
+        </button>
+      </div>
+    </form>
+  </div>
+  

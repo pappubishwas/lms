@@ -1,0 +1,75 @@
+
+<div class="p-6 bg-gray-50 min-h-screen">
+    <h1 class="text-3xl font-bold text-gray-800 text-center mb-6">Admin Dashboard</h1>
+  
+    <!-- General Stats -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div class="bg-white p-4 rounded-lg shadow">
+        <h2 class="text-xl font-bold text-gray-700">Total Users</h2>
+        <p class="text-2xl text-blue-600">{{ totalUsers }}</p>
+      </div>
+      <div class="bg-white p-4 rounded-lg shadow">
+        <h2 class="text-xl font-bold text-gray-700">Total Members</h2>
+        <p class="text-2xl text-green-600">{{ totalMembers }}</p>
+      </div>
+      <div class="bg-white p-4 rounded-lg shadow">
+        <h2 class="text-xl font-bold text-gray-700">Active Members</h2>
+        <p class="text-2xl text-yellow-600">{{ totalActiveMembers }}</p>
+      </div>
+      <div class="bg-white p-4 rounded-lg shadow">
+        <h2 class="text-xl font-bold text-gray-700">Premium Members</h2>
+        <p class="text-2xl text-purple-600">{{ totalPremiumMembers }}</p>
+      </div>
+      <div class="bg-white p-4 rounded-lg shadow">
+        <h2 class="text-xl font-bold text-gray-700">Regular Members</h2>
+        <p class="text-2xl text-indigo-600">{{ totalRegularMembers }}</p>
+      </div>
+    </div>
+  
+    <!-- Borrowed Books Stats -->
+    <div class="bg-white text-black p-6 rounded-lg shadow mt-8">
+      <h2 class="text-2xl font-bold text-gray-800">Borrowed Books Statistics</h2>
+      <p class="text-lg mt-2">
+        Total  Books: <span class="font-semibold">{{ totalBook }}</span>
+      </p>
+      <p class="text-lg mt-2">
+        Total Borrowed Books: <span class="font-semibold">{{ totalBorrowedBooks }}</span>
+      </p>
+      <p class="text-lg mt-2">
+        Total Returned Books: <span class="font-semibold">{{ totalReturned }}</span>
+      </p>
+      <p class="text-lg mt-2">
+        Total Pending Books: <span class="font-semibold">{{ totalPending }}</span>
+      </p>
+      <p class="text-lg mt-2">
+        Most Borrowed Book:
+        <span class="font-semibold">
+          {{ maxBorrowedBookDetails?.title || 'N/A' }}
+        </span>
+      </p>
+      <p class="text-lg mt-2">
+        Borrowed
+        <span class="font-semibold">{{ maxBorrowedCount }}</span> times
+      </p>
+    </div>
+
+     <!-- Late Returns Stats -->
+  <div class="bg-white text-black p-6 rounded-lg shadow mt-8">
+    <h2 class="text-2xl font-bold text-gray-800">Late Returns</h2>
+    <p class="text-lg mt-2">
+      Total Late Returned Books: <span class="font-semibold">{{ totalLateReturnedBooks }}</span>
+    </p>
+    <p class="text-lg mt-2">
+      Total Late Fees Collected: <span class="font-semibold text-red-600">{{ totalLateFeePaid | currency }}</span>
+    </p>
+  </div>
+
+    <div class="bg-white text-black p-6 rounded-lg shadow mt-8">
+        <h2 class="text-2xl font-bold text-gray-800">Reservations Books Statistics</h2>
+        <p class="text-lg mt-2">
+          Total Reserved Books: <span class="font-semibold">{{ totalReservedBooks }}</span>
+        </p>
+      </div>
+
+  </div>
+  

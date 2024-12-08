@@ -2,7 +2,8 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ApiService } from '../../shared/services/api.service';
-import { Order } from '../../models/models';
+import { BorrowedBook } from '../../models/models';
+
 
 @Component({
   selector: 'return-book',
@@ -19,20 +20,24 @@ export class ReturnBookComponent {
     private snackBar: MatSnackBar
   ) {
     this.returnForm = fb.group({
-      userId: fb.control(null, [Validators.required]),
+      memberId: fb.control(null, [Validators.required]),
       bookId: fb.control(null, [Validators.required]),
     });
   }
 
   getFine() {
-    let userId = this.returnForm.get('userId')?.value;
+    let memberId = this.returnForm.get('memberId')?.value;
     let bookId = this.returnForm.get('bookId')?.value;
 
-    this.apiService.getOrdersOfUser(userId).subscribe({
-      next: (res: Order[]) => {
-        if (res.some((o) => !o.returned && o.bookId == bookId)) {
-          let order: Order = res.filter((o) => o.bookId == bookId)[0];
+    this.apiService.getOrdersOfUser(memberId).subscribe({
+      next: (res: BorrowedBook[]) => {
+        console.log(res);
+
+        if (res.some((o) =>  o.bookId == bookId)) {
+          let order: BorrowedBook = res.filter((o) => o.bookId == bookId)[0];
+          console.log(order);
           this.fineToPay = this.apiService.getFine(order);
+          console.log(this.fineToPay);
         } else {
           this.snackBar.open(`User doesn't have Book with ID: ${bookId}`, 'OK');
         }
@@ -41,11 +46,12 @@ export class ReturnBookComponent {
   }
 
   returnBook() {
-    let userId = this.returnForm.get('userId')?.value;
+    let memberId = this.returnForm.get('memberId')?.value;
     let bookId = this.returnForm.get('bookId')?.value;
 
-    this.apiService.returnBook(userId, bookId, this.fineToPay!).subscribe({
+    this.apiService.returnBook(memberId, bookId, this.fineToPay!).subscribe({
       next: (res) => {
+        console.log(res);
         if (res === 'returned')
           this.snackBar.open('Book has been Returned!', 'OK');
         else this.snackBar.open('Book has not Returned!', 'OK');

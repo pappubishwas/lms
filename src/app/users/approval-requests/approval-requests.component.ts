@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { AccountStatus, User } from '../../models/models';
+import {  Member, User } from '../../models/models';
 import { ApiService } from '../../shared/services/api.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
@@ -10,34 +10,39 @@ import { MatSnackBar } from '@angular/material/snack-bar';
   styleUrl: './approval-requests.component.scss',
 })
 export class ApprovalRequestsComponent {
-  columns: string[] = [
-    'userId',
-    'userName',
-    'email',
-    'userType',
-    'createdOn',
-    'approve',
-  ];
-  users: User[] = [];
+
+  members: Member[] = [];
 
   constructor(private apiService: ApiService, private snackBar: MatSnackBar) {
-    apiService.getUsers().subscribe({
-      next: (res: User[]) => {
-        console.log(res);
-        this.users = res.filter(
-          (r) => r.accountStatus == AccountStatus.UNAPROOVED
-        );
+    apiService.GetAllMembers().subscribe({
+      next: (res: Member[]) => {
+        //console.log("Members: "+res);
+        this.members = res;
+        console.log(this.members[0]);
       },
     });
   }
 
-  approve(user: User) {
-    this.apiService.approveRequest(user.id).subscribe({
+  approve(member: Member): void {
+    this.apiService.approveRequest(member.memberId).subscribe({
       next: (res) => {
         if (res === 'approved') {
-          this.snackBar.open(`Approved for ${user.id}`, 'OK');
-        } else this.snackBar.open(`Not Approved`, 'OK');
+          this.snackBar.open(`Approved for ${member.memberId}`, 'OK');
+        } else {
+          this.snackBar.open(`Not Approved`, 'OK');
+        }
+  
+
+        setTimeout(() => {
+          window.location.reload();  
+        }, 1000);
       },
+      error: (err) => {
+        console.error('Error approving member:', err);
+        this.snackBar.open('Error occurred while approving', 'OK');
+      }
     });
   }
+  
+
 }

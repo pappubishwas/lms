@@ -10,48 +10,17 @@
 .register-form {
   width: 600px;
 
-  mat-card {
-    mat-card-header {
-      display: flex;
-      justify-content: center;
-
-      mat-card-title {
-        font-size: 2rem;
-        color: $dark-accent-A200;
-      }
-    }
-    mat-grid-tile {
-      mat-form-field {
-        width: 100%;
-      }
-    }
-
-    mat-card-actions {
-      button {
-        margin: auto;
-        width: 80%;
-      }
-      h4 {
-        margin: 0;
-        padding-right: 1rem;
-      }
-    }
-  }
+}
+input{
+  --tw-bg-opacity: 1;
+  background-color: rgb(75 85 99 / var(--tw-bg-opacity, 1)) /* #4b5563 */;
+}
+label{
+  font-size:1.2rem;
+  margin-bottom: 0.3rem;
 }
 
-.library-info {
-  width: 400px;
-  padding: 1rem;
-  border-left: 1px solid white;
-
-  mat-list-item {
-    height: auto;
-
-    p {
-      font-size: 1.2rem;
-      font-style: italic;
-      text-align: justify;
-      white-space: normal;
-    }
-  }
+h2{
+  font-size: 2rem;
 }
+

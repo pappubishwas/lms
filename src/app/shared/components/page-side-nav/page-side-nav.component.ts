@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { ApiService } from '../../services/api.service';
 import { Router } from '@angular/router';
-import { UserType } from '../../../models/models';
+import { Role } from '../../../models/models';
 
 export interface NavigationItem {
   value: string;
@@ -14,7 +14,7 @@ export interface NavigationItem {
   styleUrl: './page-side-nav.component.scss',
 })
 export class PageSideNavComponent {
-  panelName: string = '';
+  panelName: string = 'Auth Panel';
   navItems: NavigationItem[] = [];
 
   constructor(private apiService: ApiService, private router: Router) {
@@ -22,25 +22,45 @@ export class PageSideNavComponent {
       next: (status) => {
         if (status == 'loggedIn') {
           router.navigateByUrl('/home');
-          //console.log(apiService.getUserInfo());
+          
           let user = apiService.getUserInfo();
+          //console.log(user);
           if (user != null) {
-            if (user.userType == UserType.ADMIN) {
+            if (user.role == Role.Admin) {
               this.panelName = 'Admin Panel';
               this.navItems = [
                 { value: 'View Books', link: '/home' },
-                { value: 'Maintenance', link: '/maintenance' },
+                
                 { value: 'Return Book', link: '/return-book' },
-                { value: 'View Users', link: '/view-users' },
-                { value: 'Aprooval Requests', link: '/approval-requests' },
+                { value: 'Reports', link: '/reports' },
+                { value: 'Blocked Members', link: '/view-users' },
+                { value: 'Membership Requests', link: '/approval-requests' },
+                { value: 'Assgin Librarian', link: '/assgin-librarian' },
                 { value: 'All Orders', link: '/all-orders' },
-                { value: 'My Orders', link: '/my-orders' },
+                
               ];
-            } else if (user.userType == UserType.STUDENT) {
+            } else if (user.role == Role.Member) {
               this.panelName = 'Student Panel';
               this.navItems = [
                 { value: 'View Books', link: '/home' },
                 { value: 'My Orders', link: '/my-orders' },
+                { value: 'Membership Status', link: '/membership' },
+                { value: 'Notifications', link: '/notifications' },
+              ];
+            }else if(user.role==Role.Librarian){
+              this.panelName = 'Librarian Panel';
+              this.navItems = [
+                { value: 'View Books', link: '/home' },
+                { value: 'Add/Remove Books', link: '/maintenance' },
+                { value: 'Inventory', link: '/inventory' },
+                { value: 'Reports', link: '/reports' },
+                
+              ];
+            }
+            else{
+              this.navItems=[
+              { value: 'View Books', link: '/home' },
+              { value: 'Membership Status', link: '/membership' },
               ];
             }
           }
@@ -51,5 +71,8 @@ export class PageSideNavComponent {
         }
       },
     });
+  }
+  trackByLink(index: number, item: NavigationItem): string {
+    return item.link;
   }
 }

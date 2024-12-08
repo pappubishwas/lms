@@ -31,4 +31,10 @@ export class AppComponent implements OnInit {
     let status = this.apiService.isLoggedIn() ? 'loggedIn' : 'loggedOff';
     this.apiService.userStatus.next(status);
   }
+  isSidebarOpen = true;  // Initialize as true to show sidebar initially
+
+  // Toggle the sidebar visibility
+  toggleSidebar() {
+    this.isSidebarOpen = !this.isSidebarOpen;
+  }
 }

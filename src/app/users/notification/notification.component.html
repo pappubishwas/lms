@@ -1,0 +1,22 @@
+<div class="container mx-auto px-4 py-8">
+    <p class="text-5xl font-bold text-center mb-8">Notifications</p>
+  
+    <!-- Check if notifications are empty -->
+    <div *ngIf="sortedNotifications.length === 0" class="text-center text-3xl mt-5 text-gray-200">
+      <p>No notifications available</p>
+    </div>
+  
+    <!-- Loop through notifications and display them -->
+    <div *ngIf="sortedNotifications.length > 0" class="space-y-4 text-black">
+      <div *ngFor="let notification of sortedNotifications" class="bg-white shadow-md rounded-lg p-6">
+        <div class="flex justify-between items-center">
+          <div class="flex items-center space-x-4">
+            <span class="font-medium text-lg">{{ notification.type }}</span>
+          </div>
+          <span class="text-sm text-gray-500">{{ notification.timestamp | date: 'short' }}</span>
+        </div>
+        <p class="mt-4 text-gray-700">{{ notification.message }}</p>
+      </div>
+    </div>
+  </div>
+  

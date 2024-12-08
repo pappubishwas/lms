@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { AccountStatus, User, UserType } from '../../models/models';
+import {  Member, User } from '../../models/models';
 import { ApiService } from '../../shared/services/api.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
@@ -9,29 +9,20 @@ import { MatSnackBar } from '@angular/material/snack-bar';
   styleUrl: './view-users.component.scss',
 })
 export class ViewUsersComponent {
-  columns: string[] = [
-    'userId',
-    'userName',
-    'email',
-    'mobileNumber',
-    'createdOn',
-    'accountStatus',
-    'unblock',
-    'userType',
-  ];
-  users: User[] = [];
+  members: Member[] = [];
 
   constructor(private apiService: ApiService, private snackBar: MatSnackBar) {
-    apiService.getUsers().subscribe({
-      next: (res: User[]) => {
-        this.users = [];
-        res.forEach((r) => this.users.push(r));
+    apiService.getMembers().subscribe({
+      next: (res: Member[]) => {
+        //console.log("Members: "+res);
+        this.members = res.filter((m)=> m.status=="Blocked");
+        console.log(this.members[0]);
       },
     });
   }
 
-  unblockUser(user: User) {
-    var id = user.id;
+  unblockUser(member:Member) {
+    var id = member.memberId;
     this.apiService.unblock(id).subscribe({
       next: (res) => {
         if (res === 'unblocked') {

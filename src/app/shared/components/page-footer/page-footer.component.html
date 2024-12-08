@@ -1,10 +1,19 @@
-<mat-toolbar color="primary">
-    <span>Made By: Pappu Bishwas</span>
-    <span class="spacer"></span>
-    <div class="copyright">
-        <span>Copyright 2023</span>
-        <button mat-icon-button>
-            <mat-icon>copyright</mat-icon>
+<!-- Footer Toolbar -->
+<div class="bg-blue-600 text-white p-4 flex items-center justify-between flex-wrap">
+    <!-- Left Side: Made By -->
+    <span class="text-sm font-medium">Made By: Pappu Bishwas</span>
+
+    <!-- Spacer for right-side alignment -->
+    <div class="flex-1"></div>
+
+    <!-- Right Side: Copyright Info with Icon Button -->
+    <div class="flex items-center space-x-2">
+        <span class="text-sm font-medium">Copyright 2023</span>
+        <!-- Copyright Icon Button -->
+        <button class="text-white p-2 hover:bg-blue-700 rounded-full transition duration-200">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor">
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm1-13h-2v6h2zm0 8h-2v2h2z"/>
+            </svg>
         </button>
     </div>
-</mat-toolbar>
+</div>

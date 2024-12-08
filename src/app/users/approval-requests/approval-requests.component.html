@@ -1,9 +1,41 @@
-<mat-card>
-    <mat-card-content>
-        <h1>Pending Approval Requests ({{users.length}})</h1>
-    </mat-card-content>
-</mat-card>
-
-<page-table [columns]="columns" [dataSource]="users"
-            (approve)="approve($event)">
-</page-table>
+<div class="bg-gray-700 p-6 rounded-lg shadow-md">
+    <!-- Header Section -->
+    <div class="text-center">
+      <p class="text-3xl font-bold text-gray-100">Pending Approval Requests for Membership ({{ members.length }})</p>
+    </div>
+  
+    <!-- Members Table -->
+    <div class="mt-6 overflow-x-auto">
+      <table class="table-auto w-full border-collapse border border-gray-200">
+        <thead class="bg-gray-300">
+          <tr>
+            <th class="border border-gray-300 px-4 py-2">Member ID</th>
+            <th class="border border-gray-300 px-4 py-2">Name</th>
+            <th class="border border-gray-300 px-4 py-2">Contact Details</th>
+            <th class="border border-gray-300 px-4 py-2">Membership Type</th>
+            <th class="border border-gray-300 px-4 py-2">Status</th>
+            <th class="border border-gray-300 px-4 py-2">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Loop through members -->
+          <tr *ngFor="let member of members" class="text-center hover:bg-gray-500">
+            <td class="border border-gray-300 px-4 py-2">{{ member.memberId }}</td>
+            <td class="border border-gray-300 px-4 py-2">{{ member.name }}</td>
+            <td class="border border-gray-300 px-4 py-2">{{ member.contactDetails }}</td>
+            <td class="border border-gray-300 px-4 py-2">{{ member.membershipType }}</td>
+            <td class="border border-gray-300 px-4 py-2">{{ member.status }}</td>
+            <td class="border border-gray-300 px-4 py-2">
+              <!-- Approve Button -->
+              <button 
+                (click)="approve(member)" 
+                class="bg-green-500 text-white py-1 px-4 rounded-lg hover:bg-green-600">
+                Approve
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  

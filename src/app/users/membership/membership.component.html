@@ -1,0 +1,64 @@
+<div class="p-4 flex flex-col justify-center items-center">
+    <div *ngIf="text" class="text-white text-2xl text-center my-5 mb-5">{{ text }}</div>
+
+    <div *ngIf="member.length > 0">
+      <p class="text-xl font-bold mb-4">Your Membership Details:</p>
+      <ul>
+        <li *ngFor="let m of member" class="mb-2">
+          <p>Member ID: {{ m.memberId }}</p>
+          <p>Name: {{ m.name }}</p>
+          <p>Contact: {{ m.contactDetails }}</p>
+          <p>Membership Type: {{ m.membershipType }}</p>
+          <p>Status: {{ m.status }}</p>
+        </li>
+      </ul>
+    </div>
+
+
+
+
+<div class="container mx-auto p-6">
+    <form (ngSubmit)="onSubmit()" #membershipForm="ngForm">
+      <!-- Membership Dropdown -->
+      <div class="mb-6">
+        <label for="membership" class="block text-md font-bold mb-2">Select Membership</label>
+        <select
+          id="membership"
+          name="membership"
+          [(ngModel)]="selectedMembership"
+          required
+          class="border rounded-md p-2 px-4 text-lg text-black"
+        >
+          <option value="" disabled selected>Select Membership Type</option>
+          <option value="Regular">Regular</option>
+          <option value="Premium">Premium</option>
+        </select>
+      </div>
+  
+      <!-- Submit Button -->
+      <div class="mt-6">
+        <button
+        type="submit"
+        [disabled]="
+          !membershipForm.valid || 
+          (member.length > 0 && member[0].membershipType === 'Premium')"
+        class="w-full sm:w-auto bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-300"
+      >
+        Submit
+      </button>
+      
+      </div>
+    </form>
+  
+    <!-- Displaying selected membership -->
+    <div *ngIf="selectedMembership">
+      <p class="mt-4 text-lg">Selected Membership: {{ selectedMembership }}</p>
+    </div>
+  </div>
+
+
+  </div>
+  
+
+
+  

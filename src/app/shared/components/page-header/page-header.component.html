@@ -1,12 +1,44 @@
-<mat-toolbar color="primary">
-    <span>Library Management Sytem</span>
-    <span class="spacer"></span>
-    <div class="user-info">
-        @if (loggedIn) {
-        <div class="name">Hi, {{name}}</div>
-        }
-        <button mat-raised-button color="accent" routerLink="/profile">Profile</button>
-        <button mat-raised-button color="warn" (click)="logout()">Log
-            Out</button>
+<!-- Main Toolbar Container -->
+<div class="bg-blue-600 text-white p-4 flex items-center justify-between">
+    <!-- Title Section -->
+    <span class="text-xl font-bold">Library Management System</span>
+    
+    <!-- Spacer to push user info to the right (this will shrink on small screens) -->
+    <div class="flex-1"></div>
+
+    <!-- User Info Section -->
+    <div class="flex items-center space-x-4">
+        <!-- Check if user is logged in and display name -->
+        <div *ngIf="loggedIn" class="text-sm font-medium">Hi, {{ name }}</div>
+
+        <!-- Buttons Section -->
+        <div class="flex items-center space-x-2">
+            <a routerLink="/profile" class="bg-indigo-500 text-white py-2 px-4 rounded-md hover:bg-indigo-600 transition duration-200">
+                Profile
+            </a>
+            <button 
+                (click)="logout()" 
+                class="bg-red-500 text-white py-2 px-4 rounded-md hover:bg-red-600 transition duration-200">
+                Log Out
+            </button>
+        </div>
     </div>
-</mat-toolbar>
+</div>
+
+<!-- Mobile Hamburger Menu (for smaller screens) -->
+<div class="lg:hidden flex items-center">
+    <!-- Hamburger Icon (toggle menu visibility) -->
+    <button class="text-white p-2" (click)="toggleMenu()">
+        <i class="fas fa-bars"></i> <!-- Font Awesome Hamburger Icon -->
+    </button>
+</div>
+
+<!-- Hamburger Navigation Menu for Mobile -->
+<div *ngIf="isMenuOpen" class="lg:hidden flex flex-col space-y-2 mt-2 bg-blue-600 p-4 rounded-md">
+    <a href="/profile" class="bg-indigo-500 text-white py-2 px-4 rounded-md hover:bg-indigo-600">Profile</a>
+    <button 
+        (click)="logout()" 
+        class="bg-red-500 text-white py-2 px-4 rounded-md hover:bg-red-600">
+        Log Out
+    </button>
+</div>

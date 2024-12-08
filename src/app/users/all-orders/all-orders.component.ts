@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
-import { Order } from '../../models/models';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ApiService } from '../../shared/services/api.service';
+import { BorrowedBook } from '../../models/models';
 
 @Component({
   selector: 'all-orders',
@@ -9,37 +9,34 @@ import { ApiService } from '../../shared/services/api.service';
   styleUrl: './all-orders.component.scss',
 })
 export class AllOrdersComponent {
-  columnsForPendingReturns: string[] = [
-    'orderId',
-    'userIdForOrder',
-    'userNameForOrder',
-    'bookId',
-    'orderDate',
-    'fineToPay',
-  ];
-
-  columnsForCompletedReturns: string[] = [
-    'orderId',
-    'userIdForOrder',
-    'userNameForOrder',
-    'bookId',
-    'orderDate',
-    'returnedDate',
-    'finePaid',
-  ];
-
   showProgressBar: boolean = false;
-  ordersWithPendingReturns: Order[] = [];
-  ordersWithCompletedReturns: Order[] = [];
+  ordersWithPendingReturns: BorrowedBook[] = [];
+  ordersWithCompletedReturns: BorrowedBook[] = [];
 
-  constructor(private apiService: ApiService, private snackBar: MatSnackBar) {
-    apiService.getOrders().subscribe({
-      next: (res: Order[]) => {
-        this.ordersWithPendingReturns = res.filter((o) => !o.returned);
-        this.ordersWithCompletedReturns = res.filter((o) => o.returned);
+  constructor(private apiService: ApiService, private snackBar: MatSnackBar) {}
+
+  ngOnInit(): void {
+    this.fetchOrders();
+  }
+
+  fetchOrders() {
+    this.showProgressBar = true;
+
+    this.apiService.getOrders().subscribe({
+      next: (res: BorrowedBook[]) => {
+        this.ordersWithPendingReturns = res
+          .filter((o) => o.status === 0)
+          .map((order) => ({
+            ...order,
+            lateFee: this.apiService.getFine(order),
+          }));
+
+        this.ordersWithCompletedReturns = res.filter((o) => o.status === 1);
+        this.showProgressBar = false;
       },
       error: (err) => {
         this.snackBar.open('No Orders Found', 'OK');
+        this.showProgressBar = false;
       },
     });
   }
@@ -73,6 +70,14 @@ export class AllOrdersComponent {
           this.snackBar.open('Not BLOCKED!', 'OK');
           this.showProgressBar = false;
         }
+      },
+    });
+  }
+
+  membershipRenewal() {
+    this.apiService.membershipRenewal().subscribe({
+      next: (res) => {
+        this.snackBar.open(res, 'Ok');
       },
     });
   }

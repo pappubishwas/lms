@@ -1,17 +1,32 @@
-<mat-sidenav-container>
+<!-- Main container for the layout -->
+<div class="flex flex-col lg:flex-row min-h-screen">
 
-    <mat-sidenav opened mode="side">
-        <page-side-nav></page-side-nav>
-    </mat-sidenav>
+  <!-- Sidebar for larger screens, collapsible for smaller screens -->
+  <div class="lg:w-60 w-full bg-gray-800 text-white h-screen lg:block fixed lg:fixed  top-0 left-0 transition-all duration-300" [class.hidden]="!isSidebarOpen"
+    [class.block]="isSidebarOpen || !isSidebarOpen" >
+    <page-side-nav></page-side-nav>
+  </div>
 
-    <mat-sidenav-content>
-        <page-header></page-header>
+  <!-- Main content area -->
+  <div class="flex-1 lg:ml-60 flex flex-col">
 
-        <main>
-            <router-outlet></router-outlet>
-        </main>
+    <!-- Page header -->
+    <page-header></page-header>
 
-        <page-footer></page-footer>
-    </mat-sidenav-content>
+    <!-- Main content section (where router-outlet is rendered) -->
+    <main class="flex-1 p-4">
+      <router-outlet></router-outlet>
+    </main>
 
-</mat-sidenav-container>
+    <!-- Footer -->
+    <page-footer></page-footer>
+  </div>
+
+  <!-- Mobile sidebar toggle button -->
+  <button class="lg:hidden fixed top-4 left-4 p-3 bg-blue-500 text-white rounded-lg shadow-md" (click)="toggleSidebar()">
+    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+    </svg>
+  </button>
+
+</div>

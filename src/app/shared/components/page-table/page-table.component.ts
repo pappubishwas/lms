@@ -1,11 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import {
-  AccountStatus,
-  Book,
-  Order,
-  User,
-  UserType,
-} from '../../../models/models';
+import { BorrowedBook, User } from '../../../models/models';
 import { ApiService } from '../../services/api.service';
 
 @Component({
@@ -26,13 +20,13 @@ export class PageTableComponent {
   @Output()
   unblock = new EventEmitter<User>();
 
-  getFineToPay(order: Order) {
+  getFineToPay(order: BorrowedBook) {
     return this.apiService.getFine(order);
   }
 
   constructor(private apiService: ApiService) {}
 
-  getAccountStatus(input: AccountStatus) {
-    return AccountStatus[input];
-  }
+  // getAccountStatus(input: isActive) {
+  //   return isActive[input];
+  // }
 }

@@ -1,42 +1,33 @@
 import { Component } from '@angular/core';
-import { Order } from '../../models/models';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ApiService } from '../../shared/services/api.service';
+import { BorrowedBook } from '../../models/models';
 @Component({
   selector: 'user-orders',
   templateUrl: './user-orders.component.html',
   styleUrl: './user-orders.component.scss',
 })
 export class UserOrdersComponent {
-  columnsForPendingReturns: string[] = [
-    'orderId',
-    'bookId',
-    'bookTitle',
-    'orderDate',
-    'fineToPay',
-  ];
-  columnsForCompletedReturns: string[] = [
-    'orderId',
-    'bookId',
-    'bookTitle',
-    'orderDate',
-    'returnedDate',
-    'finePaid',
-  ];
-  pendingReturns: Order[] = [];
-  completedReturns: Order[] = [];
+
+  pendingReturns: BorrowedBook[] = [];
+  completedReturns: BorrowedBook[] = [];
 
   constructor(private apiService: ApiService, private snackBar: MatSnackBar) {
     let userId = this.apiService.getUserInfo()!.id;
-    apiService.getOrdersOfUser(userId).subscribe({
-      next: (res: Order[]) => {
-        this.pendingReturns = res.filter((o) => !o.returned);
-        this.completedReturns = res.filter((o) => o.returned);
+    apiService.getOrders().subscribe({
+      next: (res: BorrowedBook[]) => {
+        
+        this.pendingReturns = res
+        .filter((o) => o.status === 0 && o.member.userId==userId)
+        .map((order) => ({
+          ...order,
+          lateFee: this.apiService.getFine(order), 
+        }));
+        
+        this.completedReturns = res.filter((o) => o.status === 1 && userId==o.member.userId);
+
       },
     });
   }
 
-  getFineToPay(order: Order) {
-    return this.apiService.getFine(order);
-  }
 }

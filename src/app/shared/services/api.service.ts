@@ -1,8 +1,16 @@
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { JwtHelperService } from '@auth0/angular-jwt';
-import { Subject, map } from 'rxjs';
-import { Book, BookCategory, Order, User, UserType } from '../../models/models';
+import { Observable, Subject, map } from 'rxjs';
+import {
+  Book,
+  BookCategory,
+  BorrowedBook,
+  Member,
+  Reservation,
+  Role,
+  User,
+} from '../../models/models';
 
 @Injectable({
   providedIn: 'root',
@@ -12,10 +20,13 @@ export class ApiService {
   userStatus: Subject<string> = new Subject();
   constructor(private http: HttpClient, private jwt: JwtHelperService) {}
 
+  getUser(): Observable<{ username: string; email: string }[]> {
+    return this.http.get<{ username: string; email: string }[]>(
+      this.baseUrl + 'GetUser'
+    );
+  }
 
   register(user: any) {
-    console.log('api service');
-    console.log(user);
     return this.http.post(this.baseUrl + 'Register', user, {
       responseType: 'text',
     });
@@ -46,18 +57,18 @@ export class ApiService {
     var decodedToken = this.jwt.decodeToken();
     var user: User = {
       id: decodedToken.id,
+      username: decodedToken.username,
       firstName: decodedToken.firstName,
       lastName: decodedToken.lastName,
       email: decodedToken.email,
       mobileNumber: decodedToken.mobileNumber,
-      userType: UserType[decodedToken.userType as keyof typeof UserType],
-      accountStatus: decodedToken.accountStatus,
+      role: Role[decodedToken.role as keyof typeof Role],
+      isActive: decodedToken.isActive,
       createdOn: decodedToken.createdOn,
       password: '',
     };
     return user;
   }
-
 
   logOut() {
     localStorage.removeItem('access_token');
@@ -68,57 +79,83 @@ export class ApiService {
     return this.http.get<Book[]>(this.baseUrl + 'GetBooks');
   }
 
+  GetAllMembers() {
+    return this.http.get<Member[]>(this.baseUrl + 'GetAllMembers');
+  }
   
+  GetAllBorrowedBooks(){
+    return this.http.get<BorrowedBook[]>(this.baseUrl + 'GetAllBorrowedBooks');
+  }
+
+  getMember(id: number) {
+    return this.http.get<Member[]>(`${this.baseUrl}GetMember?id=${id}`);
+  }
+
+  membership(member: any) {
+    //console.log(member);
+    return this.http.post(this.baseUrl + 'Membership', member, {
+      responseType: 'text',
+    });
+  }
+  
+  logSearch(searchDetails: { memberId: number; searchQuery: string; resultsCount: number }) {
+    return this.http.post(this.baseUrl + 'LogSearch', {
+        userId: searchDetails.memberId,
+        query: searchDetails.searchQuery,
+        count: searchDetails.resultsCount,
+    }, {
+        responseType: 'text', 
+    });
+}
+
+  
+
   orderBook(book: Book) {
+    //console.log(book);
     let userId = this.getUserInfo()!.id;
     let params = new HttpParams()
       .append('userId', userId)
-      .append('bookId', book.id);
-
+      .append('bookId', book.bookId);
+    console.log(params);
     return this.http.post(this.baseUrl + 'OrderBook', null, {
       params: params,
       responseType: 'text',
     });
   }
 
-
-  getOrdersOfUser(userId: number) {
-    let params = new HttpParams().append('userId', userId);
-    return this.http
-      .get<any>(this.baseUrl + 'GetOrdersOfUser', {
-        params: params,
-      })
-      .pipe(
-        map((orders) => {
-          let newOrders = orders.map((order: any) => {
-            let newOrder: Order = {
-              id: order.id,
-              userId: order.userId,
-              userName: order.user.firstName + ' ' + order.user.lastName,
-              bookId: order.bookId,
-              bookTitle: order.book.title,
-              orderDate: order.orderDate,
-              returned: order.returned,
-              returnDate: order.returnDate,
-              finePaid: order.finePaid,
-            };
-            return newOrder;
-          });
-          return newOrders;
-        })
-      );
+  getBorrowedBookListOfUser(userId: number) {
+    return this.http.get<[]>(
+      `${this.baseUrl}GetBorrowedBookListOfUser?userId=${userId}`
+    );
   }
 
-  getFine(order: Order) {
+  getOrdersOfUser(memberId: number) {
+    let params = new HttpParams().append('memberId', memberId);
+    return this.http.get<any>(this.baseUrl + 'GetOrdersOfUser', {
+      params: params,
+    });
+  }
+
+  getFine(order: BorrowedBook) {
     let today = new Date();
-    let orderDate = new Date(Date.parse(order.orderDate));
-    orderDate.setDate(orderDate.getDate() + 10);
-    if (orderDate.getTime() < today.getTime()) {
-      var diff = today.getTime() - orderDate.getTime();
-      let days = Math.floor(diff / (1000 * 86400));
-      return days * 50;
+    let dueDate = new Date(order.dueDate);
+
+    if (dueDate.getTime() < today.getTime()) {
+      let diff = today.getTime() - dueDate.getTime();
+
+      let days = Math.floor(diff / (1000 * 60 * 60 * 24));
+
+      return days * 30;
     }
+
     return 0;
+  }
+
+  assignLibrarian(username: string) {
+    return this.http.get(this.baseUrl + 'AssignLibrarian', {
+      params: new HttpParams().append('username', username),
+      responseType: 'text',
+    });
   }
 
   addNewCategory(category: BookCategory) {
@@ -131,7 +168,8 @@ export class ApiService {
     return this.http.get<BookCategory[]>(this.baseUrl + 'GetCategories');
   }
 
-  addBook(book: Book) {
+  addBook(book: any) {
+    //console.log(book);
     return this.http.post(this.baseUrl + 'AddBook', book, {
       responseType: 'text',
     });
@@ -144,10 +182,10 @@ export class ApiService {
     });
   }
 
-  returnBook(userId: string, bookId: string, fine: number) {
+  returnBook(memberId: string, bookId: string, fine: number) {
     return this.http.get(this.baseUrl + 'ReturnBook', {
       params: new HttpParams()
-        .append('userId', userId)
+        .append('memberId', memberId)
         .append('bookId', bookId)
         .append('fine', fine),
       responseType: 'text',
@@ -158,35 +196,42 @@ export class ApiService {
     return this.http.get<User[]>(this.baseUrl + 'GetUsers');
   }
 
-  approveRequest(userId: number) {
+  getMembers() {
+    return this.http.get<Member[]>(this.baseUrl + 'GetMembers');
+  }
+
+  getReservations(){
+    return this.http.get<Reservation[]>(this.baseUrl+'GetReservations');
+  }
+
+  approveRequest(memberId: number) {
     return this.http.get(this.baseUrl + 'ApproveRequest', {
-      params: new HttpParams().append('userId', userId),
+      params: new HttpParams().append('memberId', memberId),
       responseType: 'text',
     });
   }
 
-  getOrders() {
-    return this.http.get<any>(this.baseUrl + 'GetOrders').pipe(
-      map((orders) => {
-        let newOrders = orders.map((order: any) => {
-          let newOrder: Order = {
-            id: order.id,
-            userId: order.userId,
-            userName: order.user.firstName + ' ' + order.user.lastName,
-            bookId: order.bookId,
-            bookTitle: order.book.title,
-            orderDate: order.orderDate,
-            returned: order.returned,
-            returnDate: order.returnDate,
-            finePaid: order.finePaid,
-          };
-          return newOrder;
-        });
-        return newOrders;
-      })
-    );
+  reserveBook(book:Book){
+    console.log(book);
+    let userId = this.getUserInfo()!.id;
+    let params = new HttpParams()
+      .append('userId', userId)
+      .append('bookId', book.bookId);
+    console.log(params);
+    return this.http.post(this.baseUrl + 'ReserveBook', null, {
+      params: params,
+      responseType: 'text',
+    });
   }
 
+
+  getOrders() {
+    return this.http.get<any>(this.baseUrl + 'GetOrders');
+  }
+
+  getNotifications(): Observable<Notification[]>{
+    return this.http.get<Notification[]>(this.baseUrl + 'GetNotifications');
+  }
   sendEmail() {
     return this.http.get(this.baseUrl + 'SendEmailForPendingReturns', {
       responseType: 'text',
@@ -200,10 +245,33 @@ export class ApiService {
   }
 
   unblock(userId: number) {
-    return this.http.get(this.baseUrl + "Unblock", {
-      params: new HttpParams().append("userId", userId),
-      responseType: "text",
+    return this.http.get(this.baseUrl + 'Unblock', {
+      params: new HttpParams().append('userId', userId),
+      responseType: 'text',
     });
   }
 
+  membershipRenewal(){
+    return this.http.get(this.baseUrl + 'MembershipRenewalNotification', {
+      responseType: 'text',
+    });
+  }
+
+
+  getAllInventories(): Observable<any> {
+    return this.http.get(this.baseUrl+"GetAllInventories");
+  }
+
+  
+
+  updateInventory(id: number, inventory: any): Observable<any> {
+    return this.http.put(`${this.baseUrl}/${id}`, inventory);
+  }
+
+  deleteInventory(id: number): Observable<any> {
+    // Include the id in the URL as a query parameter
+    return this.http.delete(`${this.baseUrl}DeleteInventories?id=${id}`);
+  }
+  
+  
 }

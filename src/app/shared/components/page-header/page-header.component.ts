@@ -27,4 +27,9 @@ export class PageHeaderComponent {
   logout() {
     this.apiService.logOut();
   }
+  isMenuOpen = false;
+
+  toggleMenu() {
+    this.isMenuOpen = !this.isMenuOpen;
+  }
 }

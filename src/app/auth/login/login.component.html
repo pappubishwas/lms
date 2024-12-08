@@ -1,39 +1,105 @@
-<mat-card>
-    <mat-card-header>
-        <mat-card-title>Login Form</mat-card-title>
-    </mat-card-header>
+<div class="max-w-lg mx-auto p-6 shadow-lg rounded-lg bg-white justify-center items-center">
+    <!-- Header -->
+    <div class="mb-4 text-center">
+        <p class=" font-bold text-4xl text-orange-600">Login Form</p>
+    </div>
 
-    <mat-card-content [formGroup]="loginForm">
-        <mat-form-field color="accent">
-            <mat-label>Email</mat-label>
-            <input matInput formControlName="email">
-            <mat-error>
+    <!-- Form -->
+    <form [formGroup]="loginForm" class="space-y-6">
+        <!-- Email Field -->
+        <div>
+            <label for="email" class="block text-lg font-medium text-gray-700">Email</label>
+            <input
+                id="email"
+                type="email"
+                formControlName="email"
+                class=" bg-gray-600 mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-orange-500 focus:border-orange-500"
+                placeholder="Enter your email or username"
+            />
+            <p *ngIf="loginForm.get('email')?.invalid && loginForm.get('email')?.touched" class="mt-1 text-sm text-red-500">
                 Field is required.
-            </mat-error>
-        </mat-form-field>
+            </p>
+        </div>
 
-        <mat-form-field color="accent">
-            <mat-label>Password</mat-label>
-            <input matInput [type]="hidePassword ? 'password' : 'text'"
-                   formControlName="password">
-            <button mat-icon-button matSuffix
-                    (click)="hidePassword = !hidePassword">
-                <mat-icon> {{hidePassword ? "visibility_off" : "visibility_on"}}
-                </mat-icon>
+        <!-- Password Field -->
+        <div>
+            <label for="password" class="block text-lg font-medium text-gray-700">Password</label>
+            <div class="relative">
+                <input
+                    id="password"
+                    [type]="hidePassword ? 'password' : 'text'"
+                    formControlName="password"
+                    class=" bg-gray-600 mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-orange-500 focus:border-orange-500"
+                    placeholder="Enter your password"
+                />
+                <button
+                    type="button"
+                    (click)="hidePassword = !hidePassword"
+                    class="absolute inset-y-0 right-3 flex items-center text-gray-500"
+                >
+                    <svg
+                        *ngIf="hidePassword"
+                        xmlns="http://www.w3.org/2000/svg"
+                        class="h-5 w-5"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                    >
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M13.875 18.825A10.05 10.05 0 0121 12m-1.5 0a10.05 10.05 0 00-3.675-7.825m-9.375 0a10.05 10.05 0 00-7.825 3.675m0 9.375a10.05 10.05 0 007.825 3.675M3 3l18 18"
+                        />
+                    </svg>
+                    <svg
+                        *ngIf="!hidePassword"
+                        xmlns="http://www.w3.org/2000/svg"
+                        class="h-5 w-5"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                    >
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                        />
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M2.458 12C3.732 7.943 7.523 5 12 5c4.477 0 8.268 2.943 9.542 7-.274.747-.726 1.392-1.338 1.933m-2.127 1.515A10.024 10.024 0 0112 19c-4.477 0-8.268-2.943-9.542-7"
+                        />
+                    </svg>
+                </button>
+            </div>
+            <p *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched" class="mt-1 text-sm text-red-500">
+                Field is required.
+            </p>
+        </div>
+
+        <!-- Actions -->
+        <div>
+            <button
+                type="button"
+                (click)="login()"
+                class="w-full py-2 px-4 text-white bg-orange-600 rounded-md shadow hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-orange-500"
+            >
+                Login
             </button>
-            <mat-error>
-                Field is required.
-            </mat-error>
-        </mat-form-field>
-    </mat-card-content>
+        </div>
+    </form>
 
-    <mat-card-actions>
-        <button mat-raised-button color="accent"
-                (click)="login()">Login</button>
-    </mat-card-actions>
-
-    <mat-card-actions>
-        <h4>Don't have an account?</h4>
-        <a mat-stroked-button color="accent" routerLink="/register">Register</a>
-    </mat-card-actions>
-</mat-card>
+    <!-- Footer -->
+    <div class="mt-6 text-center">
+        <p class="text-lg text-gray-900">Don't have an account?</p>
+        <a
+            routerLink="/register"
+            class="text-orange-600 text-xl font-semibold hover:underline"
+        >
+            Register
+        </a>
+    </div>
+</div>

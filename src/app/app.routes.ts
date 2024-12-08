@@ -10,6 +10,11 @@ import { ReturnBookComponent } from './books/return-book/return-book.component';
 import { ApprovalRequestsComponent } from './users/approval-requests/approval-requests.component';
 import { AllOrdersComponent } from './users/all-orders/all-orders.component';
 import { ViewUsersComponent } from './users/view-users/view-users.component';
+import { MembershipComponent } from './users/membership/membership.component';
+import { AssignLibrarianComponent } from './users/assign-librarian/assign-librarian.component';
+import { ReportsComponent } from './books/reports/reports.component';
+import { NotificationComponent } from './users/notification/notification.component';
+import { InventoryComponent } from './books/inventory/inventory.component';
 
 export const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -19,8 +24,13 @@ export const routes: Routes = [
   { path: 'maintenance', component: MaintenanceComponent },
   { path: 'return-book', component: ReturnBookComponent },
   { path: 'approval-requests', component: ApprovalRequestsComponent },
+  { path: 'assgin-librarian', component: AssignLibrarianComponent },
   { path: 'all-orders', component: AllOrdersComponent },
   { path: 'view-users', component: ViewUsersComponent },
+  { path: 'reports', component: ReportsComponent },
+  { path: 'notifications', component: NotificationComponent },
   { path: 'profile', component: ProfileComponent },
+  { path: 'inventory', component: InventoryComponent },
+  { path: 'membership', component: MembershipComponent },
   { path: '**', component: PageNotFoundComponent },
 ];

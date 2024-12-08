@@ -1,81 +1,109 @@
-<mat-card>
-    <mat-card-header>
-        <h1>Add New Category</h1>
-    </mat-card-header>
-
-    <mat-card-content [formGroup]="newCategory">
-        <mat-form-field color="accent">
-            <mat-label>Category</mat-label>
-            <input matInput formControlName="category">
-        </mat-form-field>
-
-        <mat-form-field color="accent">
-            <mat-label>SubCategory</mat-label>
-            <input matInput formControlName="subCategory">
-        </mat-form-field>
-
-        <button mat-stroked-button color="accent"
-                [disabled]="newCategory.invalid" (click)="addNewCategory()">
-            <span>Add</span>
-        </button>
-    </mat-card-content>
-</mat-card>
-
-<mat-card>
-    <mat-card-header>
-        <h1>Add New Book</h1>
-    </mat-card-header>
-
-    <mat-card-content [formGroup]="newBook">
-
-        <mat-form-field color="accent" class="book-title">
-            <mat-label>Book Title</mat-label>
-            <input matInput formControlName="title">
-        </mat-form-field>
-
-        <mat-form-field color="accent" class="book-author">
-            <mat-label>Book Author</mat-label>
-            <input matInput formControlName="author">
-        </mat-form-field>
-
-        <mat-form-field color="accent" class="book-price">
-            <mat-label>Book Price</mat-label>
-            <input matInput formControlName="price">
-        </mat-form-field>
-
-        <mat-form-field color="accent" class="category-select">
-            <mat-label>Category</mat-label>
-            <mat-select formControlName="category" #categorySelect>
-                @for (option of categoryOptions; track categoryOptions) {
-                <mat-option [value]="option.value">
-                    {{ option.displayValue | titlecase }}
-                </mat-option>
-                }
-            </mat-select>
-        </mat-form-field>
-
-        <button mat-stroked-button color="accent"
-                [disabled]="newBook.invalid || categorySelect.empty"
-                (click)="addNewBook()">
-            <span>Add</span>
-        </button>
-    </mat-card-content>
-</mat-card>
-
-<mat-card>
-    <mat-card-header>
-        <h1>Delete Existing Book</h1>
-    </mat-card-header>
-
-    <mat-card-content>
-        <mat-form-field color="accent">
-            <mat-label>Book ID</mat-label>
-            <input matInput [formControl]="deleteBook">
-        </mat-form-field>
-
-        <button mat-stroked-button color="accent" [disabled]="deleteBook.invalid"
-                (click)="deleteExistingBook()">
-            <span>Delete</span>
-        </button>
-    </mat-card-content>
-</mat-card>
+<!-- Add New Category -->
+<div class="max-w-lg mx-auto bg-white shadow-md rounded-lg p-6 mb-6">
+    <h1 class="text-2xl font-bold text-center mb-6">Add New Category</h1>
+    
+    <form [formGroup]="newCategory" class="space-y-4">
+      <!-- Category Input -->
+      <div>
+        <label for="category" class="block text-gray-700 font-semibold">Category</label>
+        <input id="category" type="text" formControlName="category" class="w-full border border-gray-300 rounded-lg p-2 focus:ring focus:ring-blue-200" />
+      </div>
+  
+      <!-- SubCategory Input -->
+      <div>
+        <label for="subCategory" class="block text-gray-700 font-semibold">SubCategory</label>
+        <input id="subCategory" type="text" formControlName="subCategory" class="w-full border border-gray-300 rounded-lg p-2 focus:ring focus:ring-blue-200" />
+      </div>
+  
+      <!-- Description Input -->
+      <div>
+        <label for="description" class="block text-gray-700 font-semibold">Description</label>
+        <input id="description" type="text" formControlName="description" class="w-full border border-gray-300 rounded-lg p-2 focus:ring focus:ring-blue-200" />
+      </div>
+  
+      <!-- Add Button -->
+      <button type="button" [disabled]="newCategory.invalid" (click)="addNewCategory()" class="w-full bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 focus:outline-none">
+        Add
+      </button>
+    </form>
+  </div>
+  
+  <!-- Add New Book -->
+  <div class="max-w-lg mx-auto bg-white shadow-md rounded-lg p-6 mb-6">
+    <h1 class="text-2xl font-bold text-center mb-6">Add New Book</h1>
+    
+    <form [formGroup]="newBook" class="space-y-4">
+      <!-- Book Title Input -->
+      <div>
+        <label for="title" class="block text-gray-700 font-semibold">Book Title</label>
+        <input id="title" type="text" formControlName="title" class="w-full border border-gray-300 rounded-lg p-2 focus:ring focus:ring-blue-200" />
+      </div>
+  
+      <!-- Book Author Input -->
+      <div>
+        <label for="author" class="block text-gray-700 font-semibold">Book Author</label>
+        <input id="author" type="text" formControlName="author" class="w-full border border-gray-300 rounded-lg p-2 focus:ring focus:ring-blue-200" />
+      </div>
+  
+      <!-- Book Genre Input -->
+      <div>
+        <label for="genre" class="block text-gray-700 font-semibold">Book Genre</label>
+        <input id="genre" type="text" formControlName="genre" class="w-full border border-gray-300 rounded-lg p-2 focus:ring focus:ring-blue-200" />
+      </div>
+  
+      <!-- ISBN Input -->
+      <div>
+        <label for="isbn" class="block text-gray-700 font-semibold">ISBN</label>
+        <input id="isbn" type="text" formControlName="isbn" class="w-full border border-gray-300 rounded-lg p-2 focus:ring focus:ring-blue-200" />
+      </div>
+  
+      <!-- Publication Date Input -->
+      <div>
+        <label for="publicationDate" class="block text-gray-700 font-semibold">Publication Date</label>
+        <input id="publicationDate" type="date" formControlName="publicationDate" class="w-full border border-gray-300 rounded-lg p-2 focus:ring focus:ring-blue-200" />
+      </div>
+  
+      <!-- Available Copies Input -->
+      <div>
+        <label for="availableCopies" class="block text-gray-700 font-semibold">Available Copies</label>
+        <input id="availableCopies" type="number" formControlName="availableCopies" class="w-full border border-gray-300 rounded-lg p-2 focus:ring focus:ring-blue-200" />
+      </div>
+  
+<!-- Category Select -->
+<div>
+    <label for="category" class="block text-black font-semibold">Category</label>
+    <select id="category" formControlName="category" class=" text-black w-full border border-gray-300 rounded-lg p-2 focus:ring focus:ring-blue-200">
+      <option value="" disabled>Select Category</option> 
+      <option *ngFor="let option of categoryOptions" [value]="option.value">
+        {{ option.displayValue | titlecase }}
+      </option>
+    </select>
+  </div>
+  
+  
+<!-- Add Button -->
+<button type="button" [disabled]="newBook.invalid || !newBook.get('category')?.value" (click)="addNewBook()" class="w-full bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 focus:outline-none">
+    Add
+  </button>
+  
+    </form>
+  </div>
+  
+  <!-- Delete Existing Book -->
+  <div class="max-w-lg mx-auto bg-white shadow-md rounded-lg p-6 mb-6">
+    <h1 class="text-2xl font-bold text-center mb-6">Delete Existing Book</h1>
+  
+    <form class="space-y-4">
+      <!-- Book ID Input -->
+      <div>
+        <label for="bookId" class="block text-gray-700 font-semibold">Book ID</label>
+        <input id="bookId" type="number" [formControl]="deleteBook" class="w-full border border-gray-300 rounded-lg p-2 focus:ring focus:ring-blue-200" />
+      </div>
+  
+      <!-- Delete Button -->
+      <button type="button" [disabled]="deleteBook.invalid" (click)="deleteExistingBook()" class="w-full bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 focus:outline-none">
+        Delete
+      </button>
+    </form>
+  </div>
+  

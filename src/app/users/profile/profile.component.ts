@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { ApiService } from '../../shared/services/api.service';
-import { UserType } from '../../models/models';
+import { Role } from '../../models/models';
 
 export interface TableElement {
   name: string;
@@ -18,13 +18,14 @@ export class ProfileComponent {
 
   constructor(private apiService: ApiService) {
     let user = apiService.getUserInfo()!;
+    //console.log(user);
     this.dataSource = [
       { name: "Name", value: user.firstName + " " + user.lastName },
       { name: "Email", value: `${user.email}` },
       { name: "Mobile", value: `${user.mobileNumber}` },
-      { name: "Account Status", value: `${user.accountStatus}` },
+      { name: "Account Status", value: `${user.isActive}` },
       { name: "Created On", value: `${user.createdOn}` },
-      { name: "Type", value: `${UserType[user.userType]}` },
+      { name: "Type", value: `${Role[user.role]}` },
     ];
   }
 }

@@ -1,0 +1,51 @@
+<div
+  class="inventory-management max-w-6xl mx-auto p-6 bg-gray-50 rounded-lg shadow-md space-y-8"
+>
+  <h2 class="text-3xl font-bold text-center text-gray-800">
+    Inventory Management
+  </h2>
+
+
+  <!-- Inventory List -->
+  <div class="overflow-x-auto">
+    <table class="min-w-full table-auto bg-white rounded-lg shadow-md">
+      <thead class="bg-gray-200 text-gray-700 uppercase text-sm font-semibold">
+        <tr>
+          <th class="p-3 text-left">Inventory ID</th>
+          <th class="p-3 text-left">Book Title</th>
+          <th class="p-3 text-left">Quantity</th>
+          <th class="p-3 text-left">Condition</th>
+          <th class="p-3 text-left">Location</th>
+          <th class="p-3 text-center">Actions</th>
+        </tr>
+      </thead>
+      <tbody class="text-gray-600">
+        <tr
+          *ngFor="let inventory of inventories"
+          class="border-b hover:bg-gray-100"
+        >
+          <td class="p-3">{{ inventory.inventoryId }}</td>
+          <td class="p-3">{{ inventory.book.title }}</td>
+          <td class="p-3">{{ inventory.quantity }}</td>
+          <td class="p-3">{{ inventory.condition ==0 ? "Good" : (inventory.condition ==1 ? "Damaged" :"Lost") }}</td>
+          <td class="p-3">{{ inventory.location }}</td>
+          <td class="p-3 text-center">
+            <div class="flex">
+              <button
+                class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 focus:ring-2 focus:ring-red-500 focus:outline-none"
+                (click)="deleteInventory(inventory.inventoryId)"
+              >
+                Delete
+              </button>
+            </div>
+          </td>
+        </tr>
+        <tr *ngIf="inventories.length === 0" class="text-center">
+          <td colspan="6" class="p-6 text-gray-500">
+            No inventory data available
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
